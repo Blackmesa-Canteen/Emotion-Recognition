@@ -1,3 +1,6 @@
 /data/
 /bad_data/
 /.idea
+/gaussian_noise_data/
+/random_noise_data/
+/salt_pepper_noise_data/
