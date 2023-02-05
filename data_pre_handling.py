@@ -62,17 +62,39 @@ def random_noise(image,noise_num):
         img_noise[x, y, :] = 255
     return img_noise
 
-def convert(input_dir, output_dir):
-    for filename in os.listdir(input_dir):
-        path = input_dir + "/" + filename # 获取文件路径
-        print("doing... ", path)
-        noise_img = cv2.imread(path)#读取图片
-        img_noise = gaussian_noise(noise_img, 0, 0.12) # 高斯噪声
-        # img_noise = sp_noise(noise_img,0.025)# 椒盐噪声
-        #img_noise  = random_noise(noise_img,500)# 随机噪声
-        cv2.imwrite(output_dir+'/'+filename,img_noise )
+def convert(input_dir, output_dir, convert_type = 0):
+    print('convert files from:' + input_dir + ' to ' + output_dir)
+    assert os.path.exists(input_dir)
+    if not os.path.isdir(output_dir):
+        os.makedirs(output_dir)
+
+    item_list = os.listdir(input_dir)
+    if len(item_list) == 0:
+        print('Input dir is empty.')
+        return 0
+
+    for item in item_list:
+        next_path = os.path.join(input_dir, item)
+        if os.path.isfile(next_path):
+            print("converting: ", next_path)
+            noise_img = cv2.imread(next_path)  # 读取图片
+            if convert_type==2:
+                img_noise  = random_noise(noise_img,500)# 随机噪声
+            elif convert_type==1:
+                img_noise = sp_noise(noise_img,0.025)# 椒盐噪声
+            else:
+                img_noise = gaussian_noise(noise_img, 0, 0.12)  # 高斯噪声
+            target_dir = os.path.join(output_dir, item)
+            # print("dump res into: ", target_dir)
+            cv2.imwrite(target_dir, img_noise)
+        else:
+            dir_name = os.path.join(output_dir, item)
+            # if dir does not exist, create one
+            if not os.path.isdir(dir_name):
+                os.makedirs(dir_name)
+            convert(next_path, dir_name, convert_type)
 
 if __name__ == '__main__':
-    input_dir = "E:/projects/essay/data/test/angry"  # 输入数据文件夹
-    output_dir = "E:/projects/essay/bad_data/test/angry"  # 输出数据文件夹
+    input_dir = "E:/projects/essay/data/test"  # 输入数据文件夹
+    output_dir = "E:/projects/essay/bad_data/test"  # 输出数据文件夹
     convert(input_dir, output_dir)
