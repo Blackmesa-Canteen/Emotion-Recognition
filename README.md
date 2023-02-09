@@ -21,7 +21,7 @@ Dirty samples clean vgg16 prediction accuracy: 0.20632487535476685
 ```
 As is shown in the result above, the accuracy of dirty samples is only 20%.
 
-## WIth denoiser
+## With denoiser
 With the help of the denoiser from this project, we can significantly increase the prediction accuracy: 
 ```
 449/449 [==============================] - 4s 9ms/step - loss: 1.1331 - accuracy: 0.5747 - auc: 0.8917
